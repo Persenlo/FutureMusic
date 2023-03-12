@@ -6,16 +6,24 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pslpro.futuremusic.ui.componsnts.MainMusicBar
 import com.pslpro.futuremusic.ui.componsnts.MainPlayList
 import com.pslpro.futuremusic.ui.componsnts.MainTopBar
 import com.pslpro.futuremusic.ui.theme.FutureMusicTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,31 +44,99 @@ fun FutureMusicMain() {
 
     val musicPlayerViewModel: MusicPlayerViewModel = viewModel()
 
+
     FutureMusicTheme {
 
-        Scaffold(
-            topBar = { MainTopBar() },
-            bottomBar = { MainMusicBar(
-                musicPlayerViewModel = musicPlayerViewModel,
-                onMusicBarClick = {
-                    val intent = Intent(context,MusicActivity::class.java)
-                    activity?.startActivity(intent)
-                },
-                onPlayClick = {
-                    musicPlayerViewModel.isPlaying = !musicPlayerViewModel.isPlaying
-                },
-                onNextClick = {
-                    Toast.makeText(context,"下一首",Toast.LENGTH_SHORT).show()
-                },
-                onListClick = {
-                    musicPlayerViewModel.isOpenPlayList = true
-                }
-            ) }
-        ) {
-            Text(text = "",Modifier.padding(it))
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
 
-        }
-        MainPlayList(musicPlayerViewModel = musicPlayerViewModel)
+        //导航内容
+        data class NavItems(val icon: ImageVector, val name: String)
+        val items = listOf(
+            NavItems(Icons.Default.AccountCircle,"我的账号"),
+            NavItems(Icons.Default.Settings, "设置"),
+            NavItems(Icons.Default.ExitToApp, "退出")
+        )
+
+        val selectedItem = remember { mutableStateOf(items[0]) }
+
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            gesturesEnabled = drawerState.isOpen,
+
+            //主界面内容
+            content = {
+                Scaffold(
+                    topBar = { MainTopBar(
+                        onMenuClick = {
+                            scope.launch { drawerState.open() }
+                        },
+                        onLocalClick = {
+
+                        },
+                        onNetClick = {
+
+                        },
+                        onSearchClick = {
+
+                        }
+                    ) },
+                    bottomBar = { MainMusicBar(
+                        musicPlayerViewModel = musicPlayerViewModel,
+                        onMusicBarClick = {
+                            val intent = Intent(context,MusicActivity::class.java)
+                            activity?.startActivity(intent)
+                        },
+                        onPlayClick = {
+                            musicPlayerViewModel.isPlaying = !musicPlayerViewModel.isPlaying
+                        },
+                        onNextClick = {
+                            Toast.makeText(context,"下一首",Toast.LENGTH_SHORT).show()
+                        },
+                        onListClick = {
+                            musicPlayerViewModel.isOpenPlayList = true
+                        }
+                    ) }
+                ) {
+                    Text(text = "",Modifier.padding(it))
+
+                }
+                MainPlayList(musicPlayerViewModel = musicPlayerViewModel)
+            },
+
+
+
+            //抽屉内容
+            drawerContent = {
+                ModalDrawerSheet(Modifier.width(IntrinsicSize.Max)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 32.dp)
+                            .fillMaxWidth()
+                            .height(128.dp)
+                            .background(MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium)
+                    ) {
+
+                    }
+                    items.forEach { item ->
+                        NavigationDrawerItem(
+                            icon = { Icon(item.icon, contentDescription = null) },
+                            label = { Text(item.name) },
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                selectedItem.value = item
+                            },
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                        )
+                    }
+                }
+            }
+        )
+
+
+
+
 
     }
 }

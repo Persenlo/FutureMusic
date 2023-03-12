@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pslpro.futuremusic.MusicPlayerViewModel
 import com.pslpro.futuremusic.R
 
@@ -48,10 +49,13 @@ fun MainMusicBar(
                 )
             Column (
                 verticalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .height(56.dp)
+                    .width(180.dp)
             ){
-                Text(text = "标题")
-                Text(text = "歌手名称")
+                Text(text = "标题", fontSize = 18.sp)
+                Text(text = "歌手名称", fontSize = 14.sp)
             }
         }
 

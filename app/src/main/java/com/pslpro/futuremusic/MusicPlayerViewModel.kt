@@ -11,4 +11,6 @@ class MusicPlayerViewModel: ViewModel() {
 
     var isOpenPlayList by mutableStateOf(false)
 
+    var sliderPosition by mutableStateOf(0f)
+
 }
