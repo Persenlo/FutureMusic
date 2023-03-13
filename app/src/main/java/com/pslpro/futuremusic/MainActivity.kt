@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -16,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pslpro.futuremusic.ui.componsnts.MainMusicBar
 import com.pslpro.futuremusic.ui.componsnts.MainPlayList
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FutureMusicMain() {
 
@@ -43,6 +44,7 @@ fun FutureMusicMain() {
     val activity = LocalContext.current as? Activity
 
     val musicPlayerViewModel: MusicPlayerViewModel = viewModel()
+    val uiViewModel:UIViewModel = viewModel()
 
 
     FutureMusicTheme {
@@ -68,14 +70,15 @@ fun FutureMusicMain() {
             content = {
                 Scaffold(
                     topBar = { MainTopBar(
+                        uiViewModel = uiViewModel,
                         onMenuClick = {
                             scope.launch { drawerState.open() }
                         },
                         onLocalClick = {
-
+                            scope.launch { uiViewModel.mainPageState.scrollToPage(0) }
                         },
                         onNetClick = {
-
+                            scope.launch { uiViewModel.mainPageState.scrollToPage(1) }
                         },
                         onSearchClick = {
 
@@ -98,7 +101,25 @@ fun FutureMusicMain() {
                         }
                     ) }
                 ) {
-                    Text(text = "",Modifier.padding(it))
+                    //主页切换使用Pager
+                    HorizontalPager(
+                        pageCount = 2,
+                        state = uiViewModel.mainPageState,
+                        contentPadding = it,
+                        modifier = Modifier.fillMaxSize()
+
+                    ) {
+                        when(it){
+                            //0为本地音乐
+                            0 -> {
+                                Text(text = "主页")
+                            }
+                            //1为网络音乐
+                            1 -> {
+                                Text(text = "网络音乐")
+                            }
+                        }
+                    }
 
                 }
                 MainPlayList(musicPlayerViewModel = musicPlayerViewModel)
@@ -114,7 +135,10 @@ fun FutureMusicMain() {
                             .padding(horizontal = 16.dp, vertical = 32.dp)
                             .fillMaxWidth()
                             .height(128.dp)
-                            .background(MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium)
+                            .background(
+                                MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.medium
+                            )
                     ) {
 
                     }

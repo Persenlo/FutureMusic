@@ -1,6 +1,7 @@
 package com.pslpro.futuremusic.ui.componsnts
 
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -11,13 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.pslpro.futuremusic.UIViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainTopBar(
     onMenuClick: () -> Unit,
     onLocalClick: () -> Unit,
     onNetClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    uiViewModel: UIViewModel
 ){
 
     Row(
@@ -34,11 +38,21 @@ fun MainTopBar(
 
         Row() {
             Button(onClick = { onLocalClick() }) {
-                Text(text = "本地音乐", color = MaterialTheme.colorScheme.onPrimary)
+                //当page页面为0时高亮
+                if (uiViewModel.mainPageState.currentPage == 0){
+                    Text(text = "本地音乐", color = MaterialTheme.colorScheme.onPrimary)
+                }else{
+                    Text(text = "本地音乐", color = MaterialTheme.colorScheme.onSecondary)
+                }
             }
             Spacer(modifier = Modifier.padding(start = 32.dp))
             Button(onClick = { onNetClick() }) {
-                Text(text = "网络音乐", color = MaterialTheme.colorScheme.onPrimary)
+                //当page页面为1时高亮
+                if (uiViewModel.mainPageState.currentPage == 1){
+                    Text(text = "网络音乐", color = MaterialTheme.colorScheme.onPrimary)
+                }else{
+                    Text(text = "网络音乐", color = MaterialTheme.colorScheme.onSecondary)
+                }
             }
         }
 

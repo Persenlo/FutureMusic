@@ -13,3 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 val Grey800 = Color(0XFF424242)
 
 val White = Color(0XFFFFFFFF)
+val SecondWhite = Color(0xFFC2C2C2)
+
+val SecondBlack = Color(0XFF909399)
