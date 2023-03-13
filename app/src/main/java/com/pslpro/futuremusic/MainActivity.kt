@@ -10,7 +10,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -24,6 +23,8 @@ import com.pslpro.futuremusic.ui.componsnts.MainMusicBar
 import com.pslpro.futuremusic.ui.componsnts.MainPlayList
 import com.pslpro.futuremusic.ui.componsnts.MainTopBar
 import com.pslpro.futuremusic.ui.theme.FutureMusicTheme
+import com.pslpro.futuremusic.ui.view.MainLocalMusic
+import com.pslpro.futuremusic.ui.view.MainNetMusic
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -44,6 +45,8 @@ fun FutureMusicMain() {
     val activity = LocalContext.current as? Activity
 
     val musicPlayerViewModel: MusicPlayerViewModel = viewModel()
+
+
     val uiViewModel:UIViewModel = viewModel()
 
 
@@ -112,11 +115,11 @@ fun FutureMusicMain() {
                         when(it){
                             //0为本地音乐
                             0 -> {
-                                Text(text = "主页")
+                                MainLocalMusic(musicPlayerViewModel= musicPlayerViewModel)
                             }
                             //1为网络音乐
                             1 -> {
-                                Text(text = "网络音乐")
+                                MainNetMusic()
                             }
                         }
                     }
