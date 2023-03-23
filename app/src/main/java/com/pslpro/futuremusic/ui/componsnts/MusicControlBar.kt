@@ -21,7 +21,8 @@ import com.pslpro.futuremusic.R
 
 @Composable
 fun MusicControlBar(
-    musicPlayerViewModel: MusicPlayerViewModel
+    musicPlayerViewModel: MusicPlayerViewModel,
+    onPlayClick: ()->Unit
 ) {
 
     //获取屏幕宽度
@@ -90,11 +91,12 @@ fun MusicControlBar(
                         )
                     }
                     Spacer(modifier = Modifier.padding(start = 16.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.sv_pause),
-                            contentDescription = "切换播放状态"
-                        )
+                    IconButton(onClick = { onPlayClick() }) {
+                        if (musicPlayerViewModel.isPlaying){
+                            Icon(painter = painterResource(id = R.drawable.sv_pause), contentDescription = "暂停")
+                        }else{
+                            Icon(painter = painterResource(id = R.drawable.sv_play), contentDescription = "播放")
+                        }
                     }
                     Spacer(modifier = Modifier.padding(start = 16.dp))
                     IconButton(onClick = { /*TODO*/ }) {

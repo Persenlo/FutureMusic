@@ -9,5 +9,5 @@ data class LocalMusicModel(
     val cover: Bitmap?,
     val songTitle: String,
     val artist: String,
-    val duration: String
+    val duration: Long
 )

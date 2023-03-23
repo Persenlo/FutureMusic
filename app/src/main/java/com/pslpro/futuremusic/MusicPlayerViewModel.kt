@@ -76,8 +76,8 @@ class MusicPlayerViewModel: ViewModel() {
                     id
                 )
 
-                val durationString = duration.toString()
-                localMusic.add(LocalMusicModel(contentUri, id, null, title, artist, durationString))
+//                val durationString = duration
+                localMusic.add(LocalMusicModel(contentUri, id, null, title, artist, duration.toLong()))
             }
         }
         initialized = true
