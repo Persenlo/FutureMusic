@@ -13,17 +13,15 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.pslpro.futuremusic.MusicActivity
 import com.pslpro.futuremusic.MusicPlayerViewModel
 import com.pslpro.futuremusic.UIViewModel
+import com.pslpro.futuremusic.service.MusicPlayerManager
 import com.pslpro.futuremusic.ui.componsnts.MainMusicBar
 import com.pslpro.futuremusic.ui.componsnts.MainPlayList
 import com.pslpro.futuremusic.ui.componsnts.MainTopBar
@@ -41,6 +39,9 @@ fun MainPage(
     musicPlayerViewModel: MusicPlayerViewModel,
     uiViewModel: UIViewModel
 ) {
+
+    val currentState by MusicPlayerManager.getPlayState().observeAsState()
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -85,10 +86,14 @@ fun MainPage(
                         navController.navigate("musicPlayerPage")
                     },
                     onPlayClick = {
-                        musicPlayerViewModel.isPlaying = !musicPlayerViewModel.isPlaying
+                        if (currentState!!){
+                            MusicPlayerManager.pause()
+                        }else{
+                            MusicPlayerManager.play()
+                        }
                     },
                     onNextClick = {
-                        Toast.makeText(context,"下一首",Toast.LENGTH_SHORT).show()
+                        MusicPlayerManager.skipToNext()
                     },
                     onListClick = {
                         musicPlayerViewModel.isOpenPlayList = true
@@ -116,6 +121,7 @@ fun MainPage(
                 }
 
             }
+            //播放列表
             MainPlayList(musicPlayerViewModel = musicPlayerViewModel)
         },
 

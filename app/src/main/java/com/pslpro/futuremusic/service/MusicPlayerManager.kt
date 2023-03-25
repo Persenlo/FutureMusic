@@ -26,6 +26,8 @@ object MusicPlayerManager {
     private val process = MutableLiveData<Int>()
     //当前歌曲在播放列表的下标
     private val listIndex = MutableLiveData<Int>(0)
+    //当前播放模式
+    private val playMode = MutableLiveData<Int>(Player.REPEAT_MODE_ALL)
 
     //获取播放列表
     fun getPlayList(): LiveData<List<LocalMusicModel>>{
@@ -50,6 +52,10 @@ object MusicPlayerManager {
     //获取当前所在下标
     fun getMusicIndex(): LiveData<Int>{
         return listIndex
+    }
+    //获取当前播放状态
+    fun getPlayMode(): LiveData<Int>{
+        return playMode
     }
 
 
@@ -140,14 +146,39 @@ object MusicPlayerManager {
     }
 
     /**
-     * 指定播放列表和播放歌曲后随机播放
-     * @list: 新的播放列表
-     * @index: 播放指定下标的歌曲
+     * 随机播放
      */
-    fun shufflePlay(list: List<LocalMusicModel>, index: Int) {
-        val mutableList = list.toMutableList()
-        mutableList.shuffle()
-        play(mutableList, index)
+    fun shufflePlay() {
+        playMode.value = 100
+        mMediaPlayer!!.shuffleModeEnabled = true
+    }
+    fun stopShufflePlay() {
+        playMode.value = Player.REPEAT_MODE_OFF
+        mMediaPlayer!!.shuffleModeEnabled = false
+    }
+
+    /**
+     * 开启循环播放
+     */
+    fun repeatModeOn(){
+        playMode.value = Player.REPEAT_MODE_ALL
+        mMediaPlayer!!.repeatMode = Player.REPEAT_MODE_ALL
+    }
+
+    /**
+     * 开启单曲循环
+     */
+    fun repeatModeOne(){
+        playMode.value = Player.REPEAT_MODE_ONE
+        mMediaPlayer!!.repeatMode = Player.REPEAT_MODE_ONE
+    }
+
+    /**
+     * 关闭循环播放，播完暂停
+     */
+    fun repeatModeOff(){
+        playMode.value = Player.REPEAT_MODE_OFF
+        mMediaPlayer!!.repeatMode = Player.REPEAT_MODE_OFF
     }
 
     /**
@@ -218,6 +249,23 @@ object MusicPlayerManager {
             setMediaItem(MediaItem.fromUri(music.contentUri))
             prepare()
         }
+    }
+
+    init {
+        listIndex.observeForever {
+            if (playList.value != null) {
+                val song = playList.value!![it]
+                playMusic(song)
+            }
+        }
+    }
+
+    fun stop() {
+        mMediaPlayer?.run {
+            stop()
+            release()
+        }
+        mMediaPlayer = null
     }
 
 

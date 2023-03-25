@@ -9,6 +9,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -19,12 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.pslpro.futuremusic.service.MusicPlayerManager
 
 @Composable
 fun MusicTopBar(
     onCloseClick: () -> Unit
 ){
 
+    val currentPlay by MusicPlayerManager.getCurrentPlay().observeAsState()
 
     ConstraintLayout(
 
@@ -53,8 +57,13 @@ fun MusicTopBar(
                 end.linkTo(parent.end,56.dp)
             }
         ) {
-            Text(text = "歌曲名称", textAlign = TextAlign.Center, fontSize = 18.sp , modifier = Modifier.fillMaxWidth() )
-            Text(text = "歌手", textAlign = TextAlign.Center, fontSize = 14.sp, modifier = Modifier.fillMaxWidth())
+            if (currentPlay != null){
+                Text(text = currentPlay!!.songTitle, textAlign = TextAlign.Center, fontSize = 18.sp , modifier = Modifier.fillMaxWidth() )
+                Text(text = currentPlay!!.artist, textAlign = TextAlign.Center, fontSize = 14.sp, modifier = Modifier.fillMaxWidth())
+            }else{
+                Text(text = "歌曲名称", textAlign = TextAlign.Center, fontSize = 18.sp , modifier = Modifier.fillMaxWidth() )
+                Text(text = "歌手", textAlign = TextAlign.Center, fontSize = 14.sp, modifier = Modifier.fillMaxWidth())
+            }
         }
     }
 

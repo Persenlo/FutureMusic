@@ -16,7 +16,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.pslpro.futuremusic.MusicPlayerViewModel
+import com.pslpro.futuremusic.service.MusicPlayerManager
 import com.pslpro.futuremusic.utils.FormatUtil
 
 @Composable
@@ -44,7 +47,14 @@ fun MainLocalMusic(musicPlayerViewModel: MusicPlayerViewModel) {
                     .padding(vertical = 4.dp)
                     .fillMaxWidth()
                     .height(72.dp)
-                    .clickable { }
+                    .clickable {
+                        //播放当前列表
+                        MusicPlayerManager.play(localMusic,index)
+                        MusicPlayerManager.play()
+                        if (MusicPlayerManager.getPlayState().value == false){
+                            MusicPlayerManager.play()
+                        }
+                    }
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -52,8 +62,8 @@ fun MainLocalMusic(musicPlayerViewModel: MusicPlayerViewModel) {
                     if (card.cover != null) {
                         Image(bitmap = card.cover.asImageBitmap(), contentDescription = "", modifier = Modifier
                             .padding(start = 8.dp)
-                            .width(64.dp)
-                            .height(64.dp)
+                            .width(56.dp)
+                            .height(56.dp)
                             .clip(MaterialTheme.shapes.small)
                         )
                     } else {
@@ -63,7 +73,7 @@ fun MainLocalMusic(musicPlayerViewModel: MusicPlayerViewModel) {
                         verticalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier
                             .fillMaxHeight()
-                            .padding(start = 8.dp)
+                            .padding(start = 12.dp)
                     ) {
                         Text(text = card.songTitle)
                         Text(text = card.artist)

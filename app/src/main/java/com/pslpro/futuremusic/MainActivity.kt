@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //初始化音乐播放器
         MusicPlayerManager.init(application = application)
-
         setContent {
             FutureMusicMain()
         }
