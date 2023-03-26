@@ -14,6 +14,9 @@ class UIViewModel: ViewModel() {
     @OptIn(ExperimentalFoundationApi::class)
     var mainPageState by mutableStateOf(PagerState())
 
+    @OptIn(ExperimentalFoundationApi::class)
+    var musicPlayerPageState by mutableStateOf(PagerState())
+
 }
 
 

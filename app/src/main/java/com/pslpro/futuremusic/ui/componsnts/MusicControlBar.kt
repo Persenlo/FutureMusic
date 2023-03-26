@@ -88,7 +88,7 @@ fun MusicControlBar(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp)
+                .height(136.dp)
         ) {
             val (processBarRef, controlButtonsRef) = remember { createRefs() }
 
@@ -97,8 +97,8 @@ fun MusicControlBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(controlButtonsRef) {
-                        top.linkTo(parent.top, 32.dp)
-                        bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top, 0.dp)
+                        bottom.linkTo(parent.bottom,16.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }

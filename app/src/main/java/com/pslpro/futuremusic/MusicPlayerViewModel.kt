@@ -85,7 +85,6 @@ class MusicPlayerViewModel: ViewModel() {
 
     fun loadBitmapIfNeeded(context: Context, index: Int) {
         if (localMusic[index].cover != null) return
-        // if this is gonna lag during scrolling, you can move it on a background thread
         backgroundScope.launch {
             val bitmap = getAlbumArt(context, localMusic[index].contentUri)
             localMusic[index] = localMusic[index].copy(cover = bitmap)
