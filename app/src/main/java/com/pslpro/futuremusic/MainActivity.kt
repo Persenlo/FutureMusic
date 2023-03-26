@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.pslpro.futuremusic.api.RetrofitClient
 import com.pslpro.futuremusic.nav.MainNav
 import com.pslpro.futuremusic.service.MusicPlayerManager
 import com.pslpro.futuremusic.ui.theme.FutureMusicTheme
@@ -19,6 +20,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //初始化音乐播放器
         MusicPlayerManager.init(application = application)
+        //初始化Retrofit
+        RetrofitClient.setBaseUrl("http://wyyapi.itaemobile.top")
+        RetrofitClient.init(application = application)
+
         setContent {
             FutureMusicMain()
         }

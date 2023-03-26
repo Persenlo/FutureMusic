@@ -51,8 +51,19 @@ dependencies {
 
     // 媒体播放器 https://exoplayer.dev/
     implementation 'com.google.android.exoplayer:exoplayer-core:2.18.1'
+
     // 图片加载库 https://github.com/coil-kt/coil/blob/main/README-zh.md
     implementation "io.coil-kt:coil-compose:2.2.2"
+
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    //GsonConverterFactory
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     implementation 'androidx.core:core-ktx:1.9.0'
 
@@ -74,6 +85,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-compose:2.5.3'
 
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
+
+    //paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha18"
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"
