@@ -40,6 +40,7 @@ fun FutureMusicMain() {
 
     val musicPlayerViewModel: MusicPlayerViewModel = viewModel()
 
+    val netMusicViewModel: NetMusicViewModel = viewModel()
 
     val uiViewModel:UIViewModel = viewModel()
     
@@ -53,6 +54,8 @@ fun FutureMusicMain() {
             context = context,
             activity = activity,
             musicPlayerViewModel = musicPlayerViewModel,
-            uiViewModel = uiViewModel)
+            uiViewModel = uiViewModel,
+            netMusicViewModel = netMusicViewModel
+        )
     }
 }

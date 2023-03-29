@@ -2,49 +2,43 @@ package com.pslpro.futuremusic.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.AsyncImage
 import com.pslpro.futuremusic.NetMusicViewModel
 import com.pslpro.futuremusic.model.PlaylistsBean
+import com.pslpro.futuremusic.nav.MainNavConfig
 import com.pslpro.futuremusic.ui.componsnts.netMusic.NetPlayListItem
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun MainNetMusic(
-    
+    navController: NavHostController,
+    netMusicViewModel: NetMusicViewModel
 ){
 
-    val netMusicViewModel: NetMusicViewModel = viewModel()
+
     val playlist = netMusicViewModel.playList.collectAsLazyPagingItems()
 
     val context: Context = LocalContext.current
@@ -53,9 +47,10 @@ fun MainNetMusic(
     when (playlist.loadState.refresh) {
         is LoadState.NotLoading -> {
             ContentInfoList(
+                navController = navController,
                 collectAsLazyPagingIDataList = playlist,
                 context = context,
-                viewModel = netMusicViewModel
+                netMusicViewModel = netMusicViewModel
             )
         }
         is LoadState.Error -> ErrorPage() { playlist.refresh() }
@@ -70,7 +65,8 @@ fun MainNetMusic(
 fun ContentInfoList(
     context: Context,
     collectAsLazyPagingIDataList: LazyPagingItems<PlaylistsBean>,
-    viewModel: NetMusicViewModel
+    netMusicViewModel: NetMusicViewModel,
+    navController: NavHostController
 ) {
     val lazyListState = rememberLazyListState()
     val focusIndex by derivedStateOf { lazyListState.firstVisibleItemIndex }
@@ -85,7 +81,8 @@ fun ContentInfoList(
             NetPlayListItem(
                 item = item!!,
                 onPlayListItemClick = {
-
+                    netMusicViewModel.choosePlayList.value = item
+                    navController.navigate(MainNavConfig.NET_PLAYLIST_DETAIL_PAGE)
                 }
             )
 
@@ -98,7 +95,8 @@ fun ContentInfoList(
                     NetPlayListItem(
                         item = item!!,
                         onPlayListItemClick = {
-
+                            netMusicViewModel.choosePlayList.value = item
+                            navController.navigate(MainNavConfig.NET_PLAYLIST_DETAIL_PAGE)
                         }
                     )
                 }

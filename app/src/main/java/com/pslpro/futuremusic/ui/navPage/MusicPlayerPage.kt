@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.pslpro.futuremusic.MusicPlayerViewModel
+import com.pslpro.futuremusic.NetMusicViewModel
 import com.pslpro.futuremusic.UIViewModel
 import com.pslpro.futuremusic.nav.MainNavConfig
 import com.pslpro.futuremusic.service.MusicPlayerManager
@@ -28,7 +29,8 @@ fun MusicPlayerPage(
     context: Context,
     activity: Activity?,
     musicPlayerViewModel: MusicPlayerViewModel,
-    uiViewModel: UIViewModel
+    uiViewModel: UIViewModel,
+    netMusicViewModel: NetMusicViewModel
 ) {
 
     val currentPlay by MusicPlayerManager.getCurrentPlay().observeAsState()

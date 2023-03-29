@@ -7,9 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pslpro.futuremusic.MusicPlayerViewModel
+import com.pslpro.futuremusic.NetMusicViewModel
 import com.pslpro.futuremusic.UIViewModel
 import com.pslpro.futuremusic.ui.navPage.MainPage
 import com.pslpro.futuremusic.ui.navPage.MusicPlayerPage
+import com.pslpro.futuremusic.ui.navPage.netMusic.PlayListSongs
 
 @Composable
 fun MainNav(
@@ -17,15 +19,19 @@ fun MainNav(
     context: Context,
     activity: Activity?,
     musicPlayerViewModel: MusicPlayerViewModel,
-    uiViewModel: UIViewModel
+    uiViewModel: UIViewModel,
+    netMusicViewModel: NetMusicViewModel
 ){
 
     NavHost(navController = navController, startDestination = MainNavConfig.MAIN_PAGE){
-        composable("mainPage"){
-            MainPage(navController,context,activity,musicPlayerViewModel,uiViewModel)
+        composable(MainNavConfig.MAIN_PAGE){
+            MainPage(navController,context,activity,musicPlayerViewModel,uiViewModel,netMusicViewModel)
         }
-        composable("musicPlayerPage"){
-            MusicPlayerPage(navController,context,activity,musicPlayerViewModel,uiViewModel)
+        composable(MainNavConfig.MUSIC_PLAYER_PAGE){
+            MusicPlayerPage(navController,context,activity,musicPlayerViewModel,uiViewModel,netMusicViewModel)
+        }
+        composable(MainNavConfig.NET_PLAYLIST_DETAIL_PAGE){
+            PlayListSongs(navController,context,activity,musicPlayerViewModel,uiViewModel,netMusicViewModel)
         }
     }
 

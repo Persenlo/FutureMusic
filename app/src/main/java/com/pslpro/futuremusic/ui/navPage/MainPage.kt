@@ -2,8 +2,6 @@ package com.pslpro.futuremusic.ui.navPage
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.pslpro.futuremusic.MusicPlayerViewModel
+import com.pslpro.futuremusic.NetMusicViewModel
 import com.pslpro.futuremusic.UIViewModel
 import com.pslpro.futuremusic.service.MusicPlayerManager
 import com.pslpro.futuremusic.ui.componsnts.MainMusicBar
@@ -37,7 +36,8 @@ fun MainPage(
     context: Context,
     activity: Activity?,
     musicPlayerViewModel: MusicPlayerViewModel,
-    uiViewModel: UIViewModel
+    uiViewModel: UIViewModel,
+    netMusicViewModel: NetMusicViewModel
 ) {
 
     val currentState by MusicPlayerManager.getPlayState().observeAsState()
@@ -115,7 +115,7 @@ fun MainPage(
                         }
                         //1为网络音乐
                         1 -> {
-                            MainNetMusic()
+                            MainNetMusic(navController,netMusicViewModel)
                         }
                     }
                 }

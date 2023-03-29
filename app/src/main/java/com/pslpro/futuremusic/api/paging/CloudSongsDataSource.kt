@@ -4,17 +4,16 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.pslpro.futuremusic.api.repository.CloudMusicRepository
-import com.pslpro.futuremusic.model.NetPlayListModel
-import com.pslpro.futuremusic.model.PlaylistsBean
+import com.pslpro.futuremusic.model.SongsBean
 
-class CloudPlayListDataSource(private val repository: CloudMusicRepository): PagingSource<Int,PlaylistsBean>() {
-    private val TAG = "CloudPlayListDataSource"
+class CloudSongsDataSource(private val repository: CloudMusicRepository, val playListId: Long): PagingSource<Int, SongsBean>() {
+    private val TAG = "CloudSongsDataSource"
 
-    override fun getRefreshKey(state: PagingState<Int, PlaylistsBean>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, SongsBean>): Int? {
         return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaylistsBean> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SongsBean> {
         return try {
             val currentPage = params.key ?: 1
             val pageSize = params.loadSize
@@ -27,7 +26,7 @@ class CloudPlayListDataSource(private val repository: CloudMusicRepository): Pag
             val curStartItem =
                 if (currentPage == 1) 1 else (currentPage - 2) * everyPageSize + 1 + initPageSize
 
-            val responseList = repository.getPlayList("",pageSize,curStartItem).playlists
+            val responseList = repository.getPlayListSongs(playListId,everyPageSize,curStartItem).songs
             // 上一页页码
             val preKey = if (currentPage == 1) null else currentPage.minus(1)
             // 下一页页码
